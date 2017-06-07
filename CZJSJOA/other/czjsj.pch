@@ -1,0 +1,63 @@
+///Users/yuhaifei/Desktop/项目/CZJSJ/CZJSJ/other/czjsj.pch/Users/yuhaifei/Desktop/项目/CZJSJ/CZJSJ
+//  czjsj.pch
+//  CZJSJ
+//
+//  Created by 虞海飞 on 15/9/19.
+//  Copyright (c) 2015年 虞海飞. All rights reserved.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_4_0
+#warning "This project uses features only available in iOS SDK 4.0 and later."
+#endif
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#endif
+
+//#ifndef CZJSJ_czjsj_pch`
+//#define CZJSJ_czjsj_pch
+
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "ShaXiang_NSObject.h"
+#import "AFNetworking.h"
+#import "Util.h"
+#import "GetHttp.h"
+#import "MBProgressHUD.h"
+#import "ChangYong_NSObject.h"
+#import "IanAlert.h"//警告框
+#import "PinJie.h"
+#import <QuickLook/QuickLook.h>
+#import "MBProgressHUD+Add.h"
+#import "DJRefresh.h"
+#import "Tool_TextView.h"
+#import "Tool_WebView.h"
+
+//流程
+#import "LiuChenBean.h"
+#import "FaSongShuJu.h"
+#import "Tool_WebView.h"
+#import "Office_TableViewController.h"
+
+/**
+*  主屏的宽
+*/
+#define DEF_SCREEN_WIDTH [[UIScreen mainScreen] bounds].size.width
+
+/**
+ *  返回NSString的 变量名
+ */
+#define varString(var) [NSString stringWithFormat:@"%s",#var]
+
+
+#pragma  mark -- 主屏的高
+/**
+ *  主屏的高
+ */
+#define DEF_SCREEN_HEIGHT [[UIScreen mainScreen] bounds].size.height
+
+
+//#endif

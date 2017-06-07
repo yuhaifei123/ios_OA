@@ -1,0 +1,32 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "cebb59d7-624b-49a2-8e2b-4b266954b823++8560",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "cebb59d7-624b-49a2-8e2b-4b266954b823++8560" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "0C321FF06BF569C35454404A836A038EECDC67AD" : 0,
+    "cebb59d7-624b-49a2-8e2b-4b266954b823++8560" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "31064E74-7A10-432A-BE3C-8C28431C1414",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "0C321FF06BF569C35454404A836A038EECDC67AD" : "",
+    "cebb59d7-624b-49a2-8e2b-4b266954b823++8560" : "ios\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "CZJSJOA",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "CZJSJOA.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/yuhaifei123\/CZJSJOA.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0C321FF06BF569C35454404A836A038EECDC67AD"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/172.16.1.224\/svn\/RD\/Titan",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "cebb59d7-624b-49a2-8e2b-4b266954b823++8560"
+    }
+  ]
+}

@@ -1,0 +1,464 @@
+1.内存中的缓存设置
+
+    ViewController.m
+
+        [as setObject:userid forKey:@"userid"];
+        用户特定的，唯一值
+        [as setObject:dept forKey:@"dept"];
+        部门的特定值
+        [as setObject:deptname forKey:@"deptname"];
+        部门的名字
+        [as setObject:username forKey:@"username"];
+        用户名字
+        [accountDefaults setObject:@"1" forKey:@"autologin"];
+        自动登录
+        NSString *remember = [as stringForKey:@"rememberPass"];
+        记得密码
+        [as setObject:self.name_Text.text forKey:@"dengLuname"];
+        登录名字
+        [as setObject:self.pass_Text.text forKey:@"dengLupass"];
+        登录密码
+        [as setObject:self.pass_Text.text forKey:@"role"];
+        部门选人  选择
+
+2.在pch中常用的方法
+
+    ChangYong_NSObject.m
+    拿小数
+    判断空值
+
+//RenWuZhuanXie_ViewController.m
+
+/***********************  上下刷新 ****************/
+#pragma mark -- 上下刷新
+/**
+下拉刷新方法
+*/
+- (void) pull_down_TableView{
+
+if (refreshTableHeaderView == nil) {
+
+EGORefreshTableHeaderView *view = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.tableView.bounds.size.height, self.view.frame.size.width, self.tableView.bounds.size.height)];
+view.delegate = self;
+[self.tableView addSubview:view];
+refreshTableHeaderView = view;
+}
+
+if(_loadMoreFooterView == nil){
+//self.tableView.frame.size.height
+CGFloat fy_table = self.tableView.bounds.size.height;
+CGFloat fy_cell = self.array.count*80.0;
+
+CGFloat fy_all;
+(fy_table > fy_cell) ? (fy_all = fy_table) : (fy_all = fy_cell);
+LoadMoreTableFooterView *view = [[LoadMoreTableFooterView alloc]initWithFrame:CGRectMake(0.0f,fy_all,self.view.frame.size.width,self.view.frame.size.height)];
+view.delegate = self;
+[self.tableView addSubview:view];
+_loadMoreFooterView = view;
+}
+
+//最后一次更新的时间
+[refreshTableHeaderView refreshLastUpdatedDate];
+}
+
+#pragma mark -
+#pragma mark Data Source Loading / Reloading Methods
+
+static int pagea = 1;//默认的页数
+static int thread = 0;//防止多线程
+
+//更新列表数据(默认是向下)
+- (void)reloadTableViewDataSource{
+
+if(thread == 0){
+
+thread =1;
+[NSThread detachNewThreadSelector:@selector(updateNewsByPullTable) toTarget:self withObject:nil]; //异步加载数据，不影tableView动作
+reloading = YES;
+thread = 0;
+}else{
+
+reloading = NO;
+}
+}
+
+//向上的时候，刷新数据
+- (void)reloadTableViewDataSource_up{
+
+if (thread == 0) {
+thread =1;
+[NSThread detachNewThreadSelector:@selector(updateNewsByPullTable_Up) toTarget:self withObject:nil]; //异步加载数据，不影tableView动作
+reloading = YES;
+thread =0;
+}else{
+
+reloading = NO;
+}
+}
+
+//调用JSON服务获取数据(向下)
+- (void)updateNewsByPullTable{
+
+[self panDuanDic:[self addDataPage:@"1"]];
+}
+
+//调用JSON服务获取数据(向上)
+- (void)updateNewsByPullTable_Up{
+
+pagea ++; //向上就是 2页数
+NSString *page_String = [NSString stringWithFormat: @"%d",pagea];
+[self panDuanDic:[self addDataPage:page_String]];
+}
+
+- (void)doneLoadingTableViewData{
+
+//model should call this when its done loading
+reloading = NO;
+[refreshTableHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.tableView];
+
+[_loadMoreFooterView egoRefreshScrollViewDataSourceDidFinishedLoading:self.tableView];
+}
+
+#pragma mark -
+#pragma mark UIScrollViewDelegate Methods
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+
+[refreshTableHeaderView egoRefreshScrollViewDidScroll:scrollView];
+[_loadMoreFooterView egoRefreshScrollViewDidScroll:scrollView];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+
+[refreshTableHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
+[_loadMoreFooterView egoRefreshScrollViewDidEndDragging:scrollView];
+}
+
+#pragma mark -
+#pragma mark EGORefreshTableHeaderDelegate Methods
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view{
+
+[self reloadTableViewDataSource];
+[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:3.0];
+_currentpageno = 0;
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view{
+
+return reloading; // should return if data source model is reloading
+}
+
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view{
+
+return [NSDate date]; // should return date data source was last changed
+}
+
+/**
+向上推动,所出现的功能
+滑动加载更多
+*/
+- (void)loadMoreTableFooterDidTriggerLoadMore:(LoadMoreTableFooterView *)view{
+[self reloadTableViewDataSource_up];
+//这里是为了延时加载数据  ，有明显的加载效果
+[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:3.0f];
+_currentpageno = 1;
+}
+
+
+
+//下拉刷新的方法
+
+//下拉刷新方法.
+// [self pull_down_TableView];
+//下拉刷新_02 方法
+//     _dataList=[[NSMutableArray alloc] init];
+//    _refreshControl_02 =[[RefreshControl alloc] initWithScrollView:self.tableView delegate:self];
+//    _refreshControl_02.topEnabled=YES;
+//    _refreshControl_02.bottomEnabled=YES;
+
+
+
+
+"
+{shopt:'signal',tablename:'
+"+tablename+"
+',YWLX:2,buskey:[{ISXS:'1',lcid:'
+"+lcname+"
+.
+"+id+"
+',pid:'
+"+lcname+"
+.
+
+"+ id+ "
+',id:'
+"+id+"
+',ISSH:'
+
+"+ issh+ "
+',bz:'
+"+ bz+ "
+
+
+',flowType:'go', clbz:'
+"+ bz+ "
+', ywid:'
+
+
+"+ id+ "
+',spyj:'
+"+spyj+"
+
+',closetype:3,functionid:'', workflowname:'
+"+lcname+"
+
+
+',userid:'
+"+ PreferencesUtil.getSharedStringData(context, "userid")+ "
+',username:'
+"+ PreferencesUtil.getSharedStringData(context, "usercnname")+ "
+
+',wintype:2,isback:'', tablename:'
+"+tablename+"
+
+
+', idlist:'
+"+ idlist+ "
+', kslist:'
+"+ kslist+ "
+', ldlist:'
+"+ ldlist+ "
+
+
+',names:'
+"+names+"
+',spyj:'
+" + spyj + "
+',spyjColumn:'
+"+spyjColumn+"
+'}]}
+";
+
+
+<ttroot><outxml><pid>sw.722</pid><transcode>OAWF01</transcode><ID>722</ID><clog><title>办理人员</title><text>吴杰</text></clog><hlog><s1>史政达</s1><s2>已阅。史政达2015-10-16</s2></hlog><shopt>signal</shopt><signalFlag>workFlowProcess</signalFlag><transcode>OAWF01</transcode><data><![CDATA[{"TEXT":"下一流程步骤：办公室汇总。\r\n下一流程步骤办理人员：吴杰","CurrentDESC":{"ALLREAD":"1","MESSAGE":"收文传阅中！","taskname":"传阅分发","ZTBS":"b05"},"CODE":"1","function":""}]]></data></outxml><RET><CODE>1</CODE><TEXT>流程执行成功</TEXT></RET></ttroot>
+
+
+
+
+
+{
+CurrentDESC = {
+ZTBS = b16,
+ROLE = oa_bgszr,
+taskname = 办公室核稿
+},
+TEXT = 多节点，请跳转到流程选择界面,
+CODE = 1,
+function = selectNodePerson,
+person = [
+{
+node = {
+ZTBS = b05,
+ALLREAD = 1,
+MESSAGE = 发文会签中！,
+ROLE = oa_jld,
+taskname = 会签
+},
+personList = [
+{
+SUINO = 3,
+LISTORDER = 1,
+SUNAME = 蔡楚秋
+},
+{
+SUINO = 265,
+LISTORDER = 10,
+SUNAME = 赛提努尔
+},
+{
+SUINO = 12,
+LISTORDER = 11,
+SUNAME = 李云刚
+},
+{
+SUINO = 13,
+LISTORDER = 12,
+SUNAME = 李武
+},
+{
+SUINO = 14,
+LISTORDER = 13,
+SUNAME = 冷和荣
+},
+{
+SUINO = 4,
+LISTORDER = 14,
+SUNAME = 吴全清
+},
+{
+SUINO = 15,
+LISTORDER = 15,
+SUNAME = 刘颖慧
+},
+{
+SUINO = 16,
+LISTORDER = 16,
+SUNAME = 高聿强
+},
+{
+SUINO = 17,
+LISTORDER = 17,
+SUNAME = 曹根明
+},
+{
+SUINO = 79,
+LISTORDER = 18,
+SUNAME = 吴留芳
+},
+{
+SUINO = 2,
+LISTORDER = 2,
+SUNAME = 史政达
+},
+{
+SUINO = 5,
+LISTORDER = 3,
+SUNAME = 邹云龙
+},
+{
+SUINO = 6,
+LISTORDER = 4,
+SUNAME = 贡浩平
+},
+{
+SUINO = 8,
+LISTORDER = 5,
+SUNAME = 赵维忠
+},
+{
+SUINO = 9,
+LISTORDER = 6,
+SUNAME = 袁茂新
+},
+{
+SUINO = 264,
+LISTORDER = 7,
+SUNAME = 黄建生
+},
+{
+SUINO = 10,
+LISTORDER = 8,
+SUNAME = 赵洪平
+},
+{
+SUINO = 11,
+LISTORDER = 9,
+SUNAME = 陶伟
+},
+]
+},
+{
+node = {
+ZTBS = b06,
+ALLREAD = 1,
+MESSAGE = 发文会签中！,
+ROLE = oa_jld,
+taskname = 领导签发
+},
+personList = [
+{
+SUINO = 3,
+LISTORDER = 1,
+SUNAME = 蔡楚秋
+},
+{
+SUINO = 265,
+LISTORDER = 10,
+SUNAME = 赛提努尔
+},
+{
+SUINO = 12,
+LISTORDER = 11,
+SUNAME = 李云刚
+},
+{
+SUINO = 13,
+LISTORDER = 12,
+SUNAME = 李武
+},
+{
+SUINO = 14,
+LISTORDER = 13,
+SUNAME = 冷和荣
+},
+{
+SUINO = 4,
+LISTORDER = 14,
+SUNAME = 吴全清
+},
+{
+SUINO = 15,
+LISTORDER = 15,
+SUNAME = 刘颖慧
+},
+{
+SUINO = 16,
+LISTORDER = 16,
+SUNAME = 高聿强
+},
+{
+SUINO = 17,
+LISTORDER = 17,
+SUNAME = 曹根明
+},
+{
+SUINO = 79,
+LISTORDER = 18,
+SUNAME = 吴留芳
+},
+{
+SUINO = 2,
+LISTORDER = 2,
+SUNAME = 史政达
+},
+{
+SUINO = 5,
+LISTORDER = 3,
+SUNAME = 邹云龙
+},
+{
+SUINO = 6,
+LISTORDER = 4,
+SUNAME = 贡浩平
+},
+{
+SUINO = 8,
+LISTORDER = 5,
+SUNAME = 赵维忠
+},
+{
+SUINO = 9,
+LISTORDER = 6,
+SUNAME = 袁茂新
+},
+{
+SUINO = 264,
+LISTORDER = 7,
+SUNAME = 黄建生
+},
+{
+SUINO = 10,
+LISTORDER = 8,
+SUNAME = 赵洪平
+},
+{
+SUINO = 11,
+LISTORDER = 9,
+SUNAME = 陶伟
+},
+]
+},
+]
+}
+
