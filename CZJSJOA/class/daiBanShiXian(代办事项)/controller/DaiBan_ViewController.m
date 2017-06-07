@@ -174,6 +174,7 @@ static NSString  *ID = @"daibai";
         }
 
         [array_zhong addObject:dic_01];
+        
     }
 
     self.array_Table = [NSMutableArray array];
