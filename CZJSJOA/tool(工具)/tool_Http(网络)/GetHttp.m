@@ -66,9 +66,6 @@
     //发送同步请求，在主线程执行
     NSData *data=[NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
 
-    //当请求结束的时候调用（有两种结果，一个是成功拿到数据，也可能没有拿到数据，请求失败）
-    [MBProgressHUD hideHUD];
-
     NSDictionary *dict = nil;
     if (data) {
 
@@ -84,6 +81,8 @@
         [IanAlert alertError:@"网络异常" length:abcd];
     }
     
+    //当请求结束的时候调用（有两种结果，一个是成功拿到数据，也可能没有拿到数据，请求失败）
+    [MBProgressHUD hideHUD];
     return dict;
 }
 
@@ -151,6 +150,7 @@
         [IanAlert alertError:@"网络异常" length:abcd];
     }
 
+    [MBProgressHUD hideHUD];
     return dict;
 }
 
@@ -218,6 +218,8 @@
         [IanAlert alertError:@"网络异常" length:abcd];
     }
     
+    //当请求结束的时候调用（有两种结果，一个是成功拿到数据，也可能没有拿到数据，请求失败）
+    [MBProgressHUD hideHUD];
     return dict;
 }
 
@@ -271,7 +273,7 @@
 
         //请求成功
         dict =[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
-
+        
         return dict;
     }else {
 
