@@ -177,7 +177,7 @@ static int xuanZhe = 1;
     self.liuChenBean.names = @"";
     self.liuChenBean.spyjColumn = spyjColumn;
 
-    [MBProgressHUD showMessage:@""];
+    //[MBProgressHUD showMessage:@""];
     NSString *pinJie = [self.faSongShuJu pinJieLiuChen:self.liuChenBean];
     Util *util = [[Util alloc]init];
     NSString *LiuChen_Util = util.tuiLiuChen;
@@ -269,6 +269,7 @@ static int xuanZhe = 1;
     self.chuXingFanShi_Text.text = self.dic_Array[@"CXFS"];
     self.suiTongRenYuan_Text.text = self.dic_Array[@"STRY"];
     self.feiYongYuSuan_TextView.text = self.dic_Array[@"FYYS"];
+    //错误
     self.fenGuanLinDaoYiJian_TextView.text = self.dic_Array[@"FGLDYJ"];
     self.juLingDaoYIjian_TextView.text = self.dic_Array[@"ZYLDYJ"];
     self.LianXiDianHuan_Text.text = self.dic_Array[@"LXDH"];
@@ -315,40 +316,35 @@ static int xuanZhe = 1;
         NSString *name = [as stringForKey:@"username"];
         NSString *message = [NSString stringWithFormat:@"%@。%@",name,string_ShiJian];
 
-        //得到属性，
-        _array_messageControl = dic[@"messageControl"];
+        //得到属性，-- 领导批示内容，有可能为空
+        self.array_messageControl = dic[@"messageControl"];
 
+        NSLog(@"%d------",self.array_messageControl.count);
         //判断是不是nil
-        if(self.array_fromControl.count != 0){
-
+        if(self.array_fromControl.count != 0 && self.array_messageControl.count > 0){
+            
             NSDictionary *dic_messageControl = self.array_messageControl[0];
             NSString *string_CONTROL = dic_messageControl[@"CONTROL"];
-
-//            if ([string_CONTROL isEqualToString:@"ZYLDYJ"]) {
-//
-//                self.banGongShiLinDao = [NSString stringWithFormat:@"%@\r\n%@",self.banGongShiLinDao,message];
-//            }else {
-//
-//                self.banGongShiLinDao = message;
-//            }
 
             if ([string_CONTROL isEqualToString:@"FGLDYJ"]) {
                 if([self.fenGuanLinDaoYiJian_TextView.text  isEqualToString:@""]){
 
-                self.fenGuanLinDaoYiJian_TextView.text = [NSString stringWithFormat:@"%@\r\n%@",self.fenGuanLinDaoYiJian_TextView.text,message];
-            }else {
+                    self.fenGuanLinDaoYiJian_TextView.text = [NSString stringWithFormat:@"%@\r\n%@",self.fenGuanLinDaoYiJian_TextView.text,message];
+                }
+                else {
 
-                self.fenGuanLinDaoYiJian_TextView.text = message;
-            }
+                    self.fenGuanLinDaoYiJian_TextView.text = message;
+                }
             }
 
             if ([string_CONTROL isEqualToString:@"ZYLDYJ"]) {
-                if([self.juLingDaoYIjian_TextView.text isEqualToString:@""]){
-                self.juLingDaoYIjian_TextView.text = [NSString stringWithFormat:@"%@\r\n%@",self.juLingDaoYIjian_TextView.text,message];
-            }else {
                 
-                self.juLingDaoYIjian_TextView.text = message;
-            }
+                if([self.juLingDaoYIjian_TextView.text isEqualToString:@""]){
+                    self.juLingDaoYIjian_TextView.text = [NSString stringWithFormat:@"%@\r\n%@",self.juLingDaoYIjian_TextView.text,message];
+                }else {
+                    
+                    self.juLingDaoYIjian_TextView.text = message;
+                }
             }
         }
         
