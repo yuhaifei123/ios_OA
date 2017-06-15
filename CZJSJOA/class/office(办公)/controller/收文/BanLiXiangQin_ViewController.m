@@ -122,6 +122,8 @@ static int xuanZhe = 1;
 -(void)viewDidDisappear:(BOOL)animated{
 
     [super viewDidDisappear:animated];
+    
+    // 关闭等待框
     [MBProgressHUD hideHUD];
 }
 /********************* 基本方法 *********************/
@@ -388,9 +390,6 @@ static int xuanZhe = 1;
     NSString *pinJie = [self.faSongShuJu pinJieLiuChen:self.liuChenBean];
     Util *util = [[Util alloc]init];
     NSString *LiuChen_Util = util.tuiLiuChen;
-
-    //loading 等待
-    [MBProgressHUD showMessage:@""];
 
     //拼接，发送数据
     NSString *pinJie_02 = [NSString stringWithFormat:@"inxml=%@&ttforward=%@&keepalive=%@",pinJie,@"common/AndroidSer/biz/AndroidSerWorkFlowService",@"1"];
