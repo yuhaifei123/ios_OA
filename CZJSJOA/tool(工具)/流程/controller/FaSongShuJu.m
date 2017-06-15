@@ -282,6 +282,7 @@
         [IanAlert alertError:@"网络异常" length:abcd];
     }
 
+    [MBProgressHUD hideHUD];
     return self.dic;
 }
 
