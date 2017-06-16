@@ -16,7 +16,7 @@
 - (NSString *) yuanShi{
 
      // return  @"http://172.16.7.107:8080/jsjoa/";
-   //return  @"http://titan.finstone.com.cn/jsjoa/";
+   //return  @"http://titan.finstone.com.cn/jsjoa1/";
 
    // return  @"http://172.16.7.107:8080/hfmis/";
 
